@@ -332,6 +332,11 @@ function showReward() {
 }
 function closeModal(){ document.getElementById('reward-modal').classList.remove('open'); }
 
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 function populateIncidentSelect(incidents) {
   var sel = document.getElementById('l-incident-select');
   sel.innerHTML = '<option value="">— Select an incident —</option>';
@@ -422,16 +427,16 @@ function renderDashboard() {
       var safeId = String(i.id).replace(/[^a-zA-Z0-9]/g,'_');
       incidentLookup[safeId] = {company: i.company, category: i.category||'', problem: i.problem||''};
       return '<div class="incident-card" id="card-'+safeId+'">'
-        +'<div class="inc-company">'+i.company+(i.category?' <span style="font-size:0.75rem;color:var(--muted);font-weight:400">&mdash; '+i.category+'</span>':'')+'</div>'
-        +'<div class="inc-issue">'+(i.problem||'')+'</div>'
-        +(i.wish?'<div class="inc-wish">'+i.wish+'</div>':'')
-        +(i.solution?'<div style="font-size:0.85rem;color:#81b29a;margin-top:6px">&#10003; '+i.solution+'</div>':'')
+        +'<div class="inc-company">'+esc(i.company)+(i.category?' <span style="font-size:0.75rem;color:var(--muted);font-weight:400">&mdash; '+esc(i.category)+'</span>':'')+'</div>'
+        +'<div class="inc-issue">'+(esc(i.problem)||'')+'</div>'
+        +(i.wish?'<div class="inc-wish">'+esc(i.wish)+'</div>':'')
+        +(i.solution?'<div style="font-size:0.85rem;color:#81b29a;margin-top:6px">&#10003; '+esc(i.solution)+'</div>':'')
         +'<div class="inc-meta">'
         +(i.hours>0?'<span class="inc-time">'+i.hours.toFixed(1)+'h lost</span>':'')
         +'<span style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:var(--red)">annoyance: '+(i.difficulty||'?')+'/10</span>'
         +'<span class="inc-date">'+date+'</span>'
-        +(i.name?'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:var(--muted)">&mdash; '+i.name+'</span>':'')
-        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:'+resolvedColor+'">'+i.resolved+'</span>'
+        +(i.name?'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:var(--muted)">&mdash; '+esc(i.name)+'</span>':'')
+        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:'+resolvedColor+'">'+esc(i.resolved)+'</span>'
         +'</div>'
         +'<button class="context-btn" onclick="getContext(\''+safeId+'\',this)">&#9670; The bigger picture</button>'
         +'<div class="context-box" id="ctx-'+safeId+'"><div class="context-label">Wider Context</div><span class="ctx-text"></span></div>'
