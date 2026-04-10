@@ -4,106 +4,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Night: The App!</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Admin Night</title>
 <style>
-  :root {
-    --bg: #0d0d0d; --surface: #141414; --surface2: #1c1c1c;
-    --border: #2a2a2a; --red: #e63946; --gold: #f4a261;
-    --cream: #f1e9d2; --muted: #666; --text: #e8e0d0;
-    --green: #81b29a;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Crimson Pro', Georgia, serif; font-size: 18px; line-height: 1.6; min-height: 100vh; }
-
-  /* HEADER */
-  .header { border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: baseline; gap: 20px; background: var(--surface); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.08em; color: var(--red); }
-  .tagline { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-  .live-dot { display: inline-block; width: 8px; height: 8px; background: var(--green); border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-  .nav button { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; cursor: pointer; transition: all 0.2s; }
-  .nav button.active, .nav button:hover { border-color: var(--red); color: var(--cream); background: rgba(230,57,70,0.08); }
-
-  /* MAIN */
-  .main { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
-  .tab { display: none; }
-  .tab.active { display: block; }
-
-  /* FORM */
-  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; color: var(--cream); margin-bottom: 6px; }
-  .section-sub { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 32px; }
-  .field { margin-bottom: 24px; }
-  label { display: block; font-family: 'Space Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-  input, textarea, select {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text); font-family: 'Crimson Pro', serif; font-size: 1rem;
-    padding: 12px 14px; outline: none; transition: border-color 0.2s;
-    appearance: none; -webkit-appearance: none;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--red); }
-  textarea { resize: vertical; min-height: 90px; }
-  select option { background: var(--surface2); }
-
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media(max-width:560px){ .row2 { grid-template-columns: 1fr; } }
-
-  .difficulty-row { display: flex; gap: 10px; }
-  .diff-btn { flex: 1; padding: 10px 0; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.7rem; cursor: pointer; transition: all 0.15s; text-align: center; }
-  .diff-btn.selected { border-color: var(--red); color: var(--cream); background: rgba(230,57,70,0.12); }
-
-  .submit-btn { width: 100%; padding: 16px; background: var(--red); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.1em; cursor: pointer; transition: opacity 0.2s; margin-top: 8px; }
-  .submit-btn:hover { opacity: 0.88; }
-  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* SUCCESS */
-  .success-box { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 28px 32px; margin-top: 32px; display: none; }
-  .success-box.visible { display: block; }
-  .success-quote { font-style: italic; font-size: 1.15rem; color: var(--cream); margin-bottom: 8px; }
-  .success-attr { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); }
-  .animal-img { width: 100%; max-width: 340px; margin: 20px auto 0; display: block; border: 1px solid var(--border); }
-
-  /* DASHBOARD */
-  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; }
-  @media(max-width:560px){ .stats-row { grid-template-columns: 1fr; } }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); padding: 20px; text-align: center; }
-  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--red); line-height: 1; }
-  .stat-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
-
-  .incident-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 20px 24px; margin-bottom: 16px; }
-  .incident-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-  .incident-company { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; color: var(--cream); }
-  .incident-meta { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); text-align: right; }
-  .incident-problem { font-size: 1rem; color: var(--text); margin-bottom: 10px; }
-  .incident-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-  .tag { font-family: 'Space Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); }
-  .tag.resolved { border-color: var(--green); color: var(--green); }
-  .tag.flagged { border-color: var(--gold); color: var(--gold); }
-
-  .report-btn { background: none; border: none; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; padding: 3px 8px; border: 1px solid transparent; transition: all 0.15s; margin-left: auto; }
-  .report-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-  .loading { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--muted); text-align: center; padding: 48px; }
-  .empty { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--muted); text-align: center; padding: 48px; border: 1px dashed var(--border); }
-
-  /* OFFENDERS */
-  .offender-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-  .offender-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--border); width: 32px; flex-shrink: 0; }
-  .offender-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.04em; color: var(--cream); flex: 1; }
-  .offender-bar-wrap { flex: 2; height: 6px; background: var(--border); }
-  .offender-bar { height: 100%; background: var(--red); transition: width 0.6s ease; }
-  .offender-count { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); width: 60px; text-align: right; }
-
-  /* COMPLAINT LETTER */
-  .letter-output { background: var(--surface2); border: 1px solid var(--border); padding: 28px 32px; margin-top: 24px; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.8; display: none; }
-  .letter-output.visible { display: block; }
-  .copy-btn { margin-top: 12px; background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 16px; cursor: pointer; transition: all 0.2s; }
-  .copy-btn:hover { border-color: var(--cream); color: var(--cream); }
-
-  /* TERMS */
-  .terms-note { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; line-height: 1.6; }
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+  :root { --bg:#0d0d0d;--surface:#141414;--surface2:#1c1c1c;--border:#2a2a2a;--red:#e63946;--gold:#f4a261;--cream:#f1e9d2;--muted:#666;--text:#e8e0d0; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:21px;line-height:1.6;min-height:100vh;}
+  .header{border-bottom:1px solid var(--border);padding:20px 40px;display:flex;align-items:baseline;gap:20px;background:var(--surface);position:sticky;top:0;z-index:100;flex-wrap:wrap;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.08em;color:var(--red);}
+  .tagline{font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+  .live-dot{display:inline-block;width:8px;height:8px;background:#81b29a;border-radius:50%;margin-right:6px;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+  .nav button{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all 0.2s;}
+  .nav button.active,.nav button:hover{border-color:var(--red);color:var(--cream);background:rgba(230,57,70,0.08);}
+  .main{max-width:1100px;margin:0 auto;padding:40px 24px;}
+  .view{display:none;}.view.active{display:block;}
+  .form-card{background:var(--surface);border:1px solid var(--border);padding:36px 40px;}
+  .form-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.06em;color:var(--cream);margin-bottom:4px;}
+  .form-sub{font-style:italic;color:var(--muted);font-size:0.95rem;margin-bottom:32px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-group.full{grid-column:1/-1;}
+  label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);}
+  input,select,textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Crimson Pro',serif;font-size:1rem;padding:10px 14px;outline:none;transition:border-color 0.2s;width:100%;}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+  select option{background:#1c1c1c;}
+  textarea{resize:vertical;min-height:90px;}
+  .time-row{display:flex;gap:10px;align-items:center;}
+  .time-label{font-size:0.85rem;color:var(--muted);}
+  .submit-btn{margin-top:28px;background:var(--red);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.12em;padding:14px 40px;cursor:pointer;transition:background 0.2s;width:100%;}
+  .submit-btn:hover{background:#c1121f;}
+  .submit-btn:disabled{background:#444;cursor:not-allowed;}
+  .letter-section{margin-top:32px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);padding:28px 32px;}
+  .letter-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;color:var(--cream);margin-bottom:4px;}
+  .letter-section-sub{font-style:italic;color:var(--muted);font-size:0.9rem;margin-bottom:20px;}
+  .incident-select-row{margin-bottom:16px;}
+  .letter-box{background:#0a0a0a;border:1px solid var(--border);padding:24px 28px;font-size:1.05rem;line-height:1.9;margin-top:20px;white-space:pre-wrap;font-family:'Crimson Pro',serif;display:none;color:var(--cream);}
+  .letter-box.visible{display:block;}
+  .letter-actions{display:flex;gap:10px;margin-top:14px;}
+  .letter-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+  .letter-btn:hover{border-color:var(--gold);color:var(--cream);}
+  .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);padding:24px;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--red);line-height:1;}
+  .stat-label{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+  .section-head{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.08em;color:var(--cream);border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px;}
+  .offender-table{width:100%;border-collapse:collapse;margin-bottom:36px;}
+  .offender-table th{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);}
+  .offender-table td{padding:12px;border-bottom:1px solid #1e1e1e;font-size:0.95rem;vertical-align:middle;}
+  .offender-table tr:hover td{background:var(--surface2);}
+  .diff-bar{display:inline-block;height:8px;background:var(--red);opacity:0.8;margin-right:8px;vertical-align:middle;}
+  .badge{font-family:'Space Mono',monospace;font-size:0.6rem;padding:3px 8px;border:1px solid;text-transform:uppercase;letter-spacing:0.08em;}
+  .badge-ins{color:#e07a5f;border-color:#e07a5f44;}
+  .badge-gov{color:#81b29a;border-color:#81b29a44;}
+  .badge-sub{color:#f2cc8f;border-color:#f2cc8f44;}
+  .badge-util{color:#9db8d2;border-color:#9db8d244;}
+  .badge-med{color:#c77dff;border-color:#c77dff44;}
+  .incident-list{display:flex;flex-direction:column;gap:12px;}
+  .incident-card{background:var(--surface);border:1px solid var(--border);padding:20px 24px;}
+  .inc-company{font-weight:600;color:var(--cream);margin-bottom:4px;}
+  .inc-issue{color:var(--muted);font-size:1.05rem;font-style:italic;line-height:1.6;margin-bottom:6px;}
+  .inc-wish{font-size:0.95rem;color:var(--gold);margin-top:4px;}
+  .inc-wish::before{content:"✦ Wished for: ";}
+  .inc-meta{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+  .inc-time{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--red);}
+  .inc-date{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);}
+  .context-btn{background:none;border:1px solid #333;color:var(--muted);font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:all 0.2s;margin-top:10px;}
+  .context-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .context-box{margin-top:12px;padding:14px 18px;background:#111;border-left:2px solid var(--gold);font-size:0.9rem;line-height:1.7;color:#c8bfa8;font-style:italic;display:none;}
+  .context-box.visible{display:block;}
+  .context-label{font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-style:normal;}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);font-style:italic;}
+  .error-msg{background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);color:#e07a5f;padding:12px 16px;font-family:'Space Mono',monospace;font-size:0.7rem;margin-top:16px;}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border);max-width:500px;width:92%;padding:36px;text-align:center;animation:fadeUp 0.35s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .animal-frame{width:100%;height:240px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);overflow:hidden;position:relative;}
+  .animal-frame img{width:100%;height:100%;object-fit:cover;display:none;}
+  .animal-fallback{font-size:5rem;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .modal-quote{font-style:italic;font-size:1.15rem;color:var(--cream);line-height:1.7;margin-bottom:10px;}
+  .modal-attribution{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase;margin-bottom:28px;}
+  .modal-close{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:10px 28px;cursor:pointer;transition:all 0.2s;}
+  .modal-close:hover{border-color:var(--red);color:var(--cream);}
+  @media(max-width:700px){.header{padding:16px 20px;}.main{padding:24px 16px;}.form-grid{grid-template-columns:1fr;}.dash-grid{grid-template-columns:1fr 1fr;}.form-card,.letter-section{padding:24px 20px;}}
 </style>
 </head>
 <body>
@@ -111,387 +98,477 @@
 <div class="header">
   <div class="logo">Admin Night: The App!</div>
   <div class="tagline"><span class="live-dot"></span>Shared live database · Fighting bureaucratic sludge together</div>
-  <nav class="nav">
-    <button class="active" onclick="showTab('log')">Log Incident</button>
-    <button onclick="showTab('dashboard')">Dashboard</button>
-    <button onclick="showTab('offenders')">Worst Offenders</button>
-    <button onclick="showTab('letter')">Complaint Letter</button>
-  </nav>
+  <div class="nav">
+    <button class="active" onclick="switchView('log',this)">Log Incident</button>
+    <button onclick="switchView('dashboard',this)">Dashboard</button>
+    <button onclick="switchView('about',this)">About</button>
+  </div>
 </div>
 
 <div class="main">
 
-  <!-- LOG INCIDENT -->
-  <div id="tab-log" class="tab active">
-    <div class="section-title">Log an Incident</div>
-    <div class="section-sub">Document your bureaucratic friction. Every entry counts.</div>
-
-    <div class="field">
-      <label>Company or Institution</label>
-      <input type="text" id="f-company" placeholder="e.g. Comcast, Blue Shield, DMV…">
+  <!-- LOG VIEW -->
+  <div class="view active" id="view-log">
+    <div class="form-card">
+      <div class="form-title">Log a New Incident</div>
+      <div class="form-sub">Name the beast, describe the battle, record the damage.</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Company or Agency</label>
+          <input type="text" id="f-company" placeholder="e.g. Comcast, IRS, United Healthcare">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="f-category">
+            <option value="">— Select —</option>
+            <option>Insurance (health)</option>
+            <option>Insurance (home/auto)</option>
+            <option>Government agency</option>
+            <option>Medical</option>
+            <option>Medical billing</option>
+            <option>Subscription / Unsubscribe</option>
+            <option>Utility</option>
+            <option>Bank / Financial</option>
+            <option>Retail / Refund</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Describe the Problem</label>
+          <textarea id="f-problem" placeholder="What happened? The more specific, the better."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Time Spent</label>
+          <div class="time-row">
+            <input type="number" id="f-hours" min="0" placeholder="0" style="width:70px">
+            <span class="time-label">hrs</span>
+            <input type="number" id="f-mins" min="0" max="59" placeholder="0" style="width:70px">
+            <span class="time-label">min</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>How Annoying Is This? (1-10)</label>
+          <input type="number" id="f-difficulty" min="1" max="10" placeholder="e.g. 8">
+        </div>
+        <div class="form-group full">
+          <label>What would you rather be doing right now?</label>
+          <input type="text" id="f-wish" placeholder="e.g. Reading on my porch, hiking with my dog...">
+        </div>
+        <div class="form-group full">
+          <label>What worked (if anything)?</label>
+          <input type="text" id="f-solution" placeholder="e.g. Escalating to a supervisor, disputing via credit card">
+        </div>
+        <div class="form-group">
+          <label>Your Name (optional)</label>
+          <input type="text" id="f-name" placeholder="e.g. Jan">
+        </div>
+        <div class="form-group">
+          <label>Resolved?</label>
+          <select id="f-resolved">
+            <option value="no">Not yet</option>
+            <option value="yes">Yes</option>
+            <option value="partial">Partially</option>
+          </select>
+        </div>
+      </div>
+      <div id="submit-error"></div>
+      <button class="submit-btn" id="submit-btn" onclick="submitIncident()">Submit &amp; Claim Your Reward</button>
     </div>
 
-    <div class="row2">
-      <div class="field">
-        <label>Category</label>
-        <select id="f-category">
-          <option value="">Select…</option>
-          <option>Insurance</option>
-          <option>Telecom / Internet</option>
-          <option>Government / DMV</option>
-          <option>Healthcare</option>
-          <option>Banking / Finance</option>
-          <option>Utilities</option>
-          <option>Airlines / Travel</option>
-          <option>Retail / E-commerce</option>
-          <option>Housing / Landlord</option>
-          <option>Other</option>
-        </select>
+    <!-- COMPLAINT LETTER -->
+    <div class="letter-section">
+      <div class="letter-section-title">Generate a Complaint Letter</div>
+      <div class="letter-section-sub">Select an incident from the dashboard and the AI will draft a formal letter — naming the regulator, stating the grievance, and demanding action.</div>
+      <div class="incident-select-row">
+        <div class="form-group">
+          <label>Select an Incident</label>
+          <select id="l-incident-select">
+            <option value="">— Loading incidents... —</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Hours wasted</label>
-        <input type="number" id="f-hours" placeholder="e.g. 3.5" min="0" step="0.5">
+      <div class="form-group" style="margin-bottom:16px">
+        <label>Your Name (for the letter)</label>
+        <input type="text" id="l-sender" placeholder="Full name">
       </div>
-    </div>
-
-    <div class="field">
-      <label>What happened?</label>
-      <textarea id="f-problem" placeholder="Describe the bureaucratic ordeal…"></textarea>
-    </div>
-
-    <div class="field">
-      <label>Difficulty (1 = annoying, 5 = life-ruining)</label>
-      <div class="difficulty-row">
-        <button class="diff-btn" onclick="setDiff(1)">1</button>
-        <button class="diff-btn" onclick="setDiff(2)">2</button>
-        <button class="diff-btn" onclick="setDiff(3)">3</button>
-        <button class="diff-btn" onclick="setDiff(4)">4</button>
-        <button class="diff-btn" onclick="setDiff(5)">5</button>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Your City, State</label>
+        <input type="text" id="l-location" placeholder="e.g. San Francisco, CA">
       </div>
-    </div>
-
-    <div class="row2">
-      <div class="field">
-        <label>What you'd rather be doing</label>
-        <input type="text" id="f-wish" placeholder="e.g. literally anything else">
+      <button class="submit-btn" onclick="generateLetter()" style="margin-top:20px">
+        <span id="letter-btn-text">Generate Complaint Letter</span>
+      </button>
+      <div class="letter-box" id="letter-output"></div>
+      <div class="recipients-box" id="recipients-box" style="display:none;margin-top:16px;background:#0d1a0d;border:1px solid #2a3a2a;border-left:3px solid #81b29a;padding:18px 22px;">
+        <div style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:#81b29a;margin-bottom:10px;">Suggested Recipients</div>
+        <div id="recipients-text" style="font-size:1rem;line-height:1.7;color:#c8d8c8;"></div>
       </div>
-      <div class="field">
-        <label>What finally worked (if anything)</label>
-        <input type="text" id="f-solution" placeholder="e.g. Twitter complaint, supervisor escalation…">
+      <div class="letter-actions" id="letter-actions" style="display:none">
+        <button class="letter-btn" onclick="copyLetter()">Copy Letter</button>
+        <button class="letter-btn" onclick="clearLetter()">Clear</button>
       </div>
-    </div>
-
-    <div class="row2">
-      <div class="field">
-        <label>Your first name (optional)</label>
-        <input type="text" id="f-name" placeholder="e.g. Jan">
-      </div>
-      <div class="field">
-        <label>Resolved?</label>
-        <select id="f-resolved">
-          <option value="no">No — still fighting</option>
-          <option value="yes">Yes — eventually</option>
-          <option value="gave-up">Gave up</option>
-        </select>
-      </div>
-    </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submitIncident()">Submit Incident Report</button>
-
-    <div class="success-box" id="success-box">
-      <div class="success-quote" id="success-quote"></div>
-      <div class="success-attr" id="success-attr"></div>
-      <img class="animal-img" id="animal-img" src="" alt="Cute animal reward">
-    </div>
-
-    <div class="terms-note">
-      Posts must be based on your genuine personal experience. Admin Night is a platform for consumer experiences and does not verify claims. Truth is the best policy — and the best defense.
     </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div id="tab-dashboard" class="tab">
-    <div class="section-title">Incident Dashboard</div>
-    <div class="section-sub">Live feed from the shared database</div>
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Incidents logged</div></div>
-      <div class="stat-card"><div class="stat-num" id="stat-hours">—</div><div class="stat-label">Hours stolen</div></div>
-      <div class="stat-card"><div class="stat-num" id="stat-resolved">—</div><div class="stat-label">Eventually resolved</div></div>
+  <!-- DASHBOARD VIEW -->
+  <div class="view" id="view-dashboard">
+    <div class="dash-grid">
+      <div class="stat-card"><div class="stat-num" id="stat-incidents">-</div><div class="stat-label">Incidents Logged</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-hours">-</div><div class="stat-label">Hours Lost to Sludge</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-offenders">-</div><div class="stat-label">Offenders Identified</div></div>
     </div>
-    <div id="incident-list"><div class="loading">Loading incidents…</div></div>
+    <div class="section-head">Worst Offenders</div>
+    <table class="offender-table">
+      <thead><tr><th>Company / Agency</th><th>Category</th><th>Incidents</th><th>Avg Annoyance</th><th>Hours Taken</th></tr></thead>
+      <tbody id="offender-tbody"><tr><td colspan="5" style="color:var(--muted);font-style:italic;padding:20px">Loading...</td></tr></tbody>
+    </table>
+    <div class="section-head">Recent Incidents</div>
+    <div class="incident-list" id="incident-list"><div class="empty-state">Loading...</div></div>
   </div>
 
-  <!-- WORST OFFENDERS -->
-  <div id="tab-offenders" class="tab">
-    <div class="section-title">Worst Offenders</div>
-    <div class="section-sub">Ranked by average difficulty score</div>
-    <div id="offender-list"><div class="loading">Loading…</div></div>
-  </div>
-
-  <!-- COMPLAINT LETTER -->
-  <div id="tab-letter" class="tab">
-    <div class="section-title">Complaint Letter Generator</div>
-    <div class="section-sub">AI-drafted formal complaint naming the right regulator</div>
-
-    <div class="field">
-      <label>Company or institution</label>
-      <input type="text" id="l-company" placeholder="e.g. Blue Shield of California">
-    </div>
-    <div class="field">
-      <label>Describe your problem</label>
-      <textarea id="l-problem" placeholder="What happened, what you've tried, what you want…" style="min-height:120px"></textarea>
-    </div>
-    <div class="row2">
-      <div class="field">
-        <label>Your name</label>
-        <input type="text" id="l-name" placeholder="Full name">
-      </div>
-      <div class="field">
-        <label>Your city / state</label>
-        <input type="text" id="l-city" placeholder="e.g. San Francisco, CA">
+  <!-- ABOUT VIEW -->
+  <div class="view" id="view-about">
+    <div class="form-card" style="max-width:720px;margin:0 auto;">
+      <div class="form-title" style="margin-bottom:24px;">About This App</div>
+      <div style="font-size:1.15rem;line-height:1.85;color:var(--text);">
+        <p style="margin-bottom:1.1em;">Welcome!</p>
+        <p style="margin-bottom:1.1em;">Thank you for visiting this extremely amateurish tool I built. It's an attempt to spotlight a particular kind of madness that's spread in recent years: awful customer service, broken portals and the relentless (and often profitable!) friction baked into everyday tasks.</p>
+        <p style="margin-bottom:1.1em;">These ordeals add up. They steal our time and our sanity, and reinforce the status quo.</p>
+        <p style="margin-bottom:1.1em;">So this is an attempt to make that friction visible.</p>
+        <p style="margin-bottom:1.1em;">I invite you to log your own experiences (click "Log Incident" in the upper right) and browse others (the Dashboard). Under each entry, you'll find "The Bigger Picture," which offers some context about the kind of problem you've encountered—imperfect, but a start. And don't skip the part about what you'd rather be doing with your time. I'm intent on capturing the real toll of these hassles.</p>
+        <p style="margin-bottom:1.1em;">There's also a complaint-letter generator you can try after logging an incident. It's imperfect too—but not bad for a robot, and a decent first step toward pushing back.</p>
+        <p style="margin-bottom:1.1em;">My hope is to build a record of these everyday breakdowns—not just to vent, but to understand where things go wrong, and how they might be improved.</p>
+        <p style="margin-bottom:1.1em;">One last thing: I'm writing a book about this stuff. If you'd like to read more and/or share your experiences/thoughts/gripes/etc, visit <a href="https://chriscolin.com" target="_blank" style="color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold);">chriscolin.com</a>.</p>
       </div>
     </div>
-    <button class="submit-btn" id="letter-btn" onclick="generateLetter()">Generate Complaint Letter</button>
-    <div class="letter-output" id="letter-output"></div>
-    <button class="copy-btn" id="copy-btn" style="display:none" onclick="copyLetter()">Copy letter to clipboard</button>
   </div>
 
-</div><!-- /main -->
+</div>
+
+<div class="modal-overlay" id="reward-modal">
+  <div class="modal">
+    <div class="animal-frame">
+      <img id="reward-img" src="" alt="Cute animal">
+      <div class="animal-fallback" id="reward-emoji">&#128062;</div>
+    </div>
+    <div class="modal-quote" id="reward-quote"></div>
+    <div class="modal-attribution" id="reward-attr"></div>
+    <button class="modal-close" onclick="closeModal()">Back to the fight</button>
+  </div>
+</div>
 
 <script>
-  const SUPABASE_URL = 'https://fkzlbcnzbdqsdovfjldk.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_YCCw5Ff9Hfokm5rJx4yrtQ_t77UYFO-';
+var SUPABASE_URL = 'https://fkzlbcnzbdqsdovfjldk.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZremxiY256YmRxc2RvdmZqbGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDY2NjIsImV4cCI6MjA5MDQ4MjY2Mn0.Lif_nR_ydeJhfE7hlzkqBOINzDAPa3G1-8OIiAJ6y6w';
 
-  let selectedDiff = 0;
+var allIncidents = [];
 
-  function showTab(name) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
-    if (name === 'dashboard') loadDashboard();
-    if (name === 'offenders') loadOffenders();
-  }
+function sbFetch(path, options) {
+  options = options || {};
+  var headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json'
+  };
+  if (options.prefer) headers['Prefer'] = options.prefer;
+  return fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    method: options.method || 'GET',
+    headers: headers,
+    body: options.body || undefined
+  }).then(function(res) {
+    if (!res.ok) return res.text().then(function(t){ throw new Error(t); });
+    return res.text().then(function(t){ return t ? JSON.parse(t) : null; });
+  });
+}
 
-  function setDiff(n) {
-    selectedDiff = n;
-    document.querySelectorAll('.diff-btn').forEach((b, i) => {
-      b.classList.toggle('selected', i < n);
+function switchView(name, btn) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.querySelectorAll('.nav button').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'dashboard') renderDashboard();
+}
+
+function loadAnimalImage() {
+  var img = document.getElementById('reward-img');
+  var emoji = document.getElementById('reward-emoji');
+  img.style.display = 'none';
+  emoji.style.display = 'flex';
+  var animals = ['&#128049;','&#128054;','&#128018;'];
+  emoji.innerHTML = animals[Math.floor(Math.random()*animals.length)];
+  var useCat = Math.random() < 0.5;
+  fetch(useCat ? 'https://api.thecatapi.com/v1/images/search' : 'https://dog.ceo/api/breeds/image/random')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var url = useCat ? d[0].url : d.message;
+      img.onload = function(){ img.style.display='block'; emoji.style.display='none'; };
+      img.src = url;
+    }).catch(function(){});
+}
+
+var quotes = [
+  {text:"Power concedes nothing without a demand. It never did and it never will.",attr:"Frederick Douglass"},
+  {text:"Civil disobedience is not our problem. Our problem is civil obedience.",attr:"Howard Zinn"},
+  {text:"The most common way people give up their power is by thinking they don't have any.",attr:"Alice Walker"},
+  {text:"You may not control all the events that happen to you, but you can decide not to be reduced by them.",attr:"Maya Angelou"},
+  {text:"Disobedience is the true foundation of liberty. The obedient must be slaves.",attr:"Henry David Thoreau"},
+  {text:"If you are neutral in situations of injustice, you have chosen the side of the oppressor.",attr:"Desmond Tutu"},
+  {text:"Injustice anywhere is a threat to justice everywhere.",attr:"Martin Luther King Jr."},
+  {text:"First they ignore you, then they laugh at you, then they fight you, then you win.",attr:"Mahatma Gandhi"},
+  {text:"Never doubt that a small group of thoughtful, committed citizens can change the world.",attr:"Margaret Mead"},
+  {text:"Resistance is the secret of joy.",attr:"Alice Walker"},
+  {text:"In a time of deceit, telling the truth is a revolutionary act.",attr:"George Orwell"},
+  {text:"I am no longer accepting the things I cannot change. I am changing the things I cannot accept.",attr:"Angela Davis"},
+  {text:"The most courageous act is still to think for yourself. Aloud.",attr:"Coco Chanel"},
+  {text:"The price of apathy towards public affairs is to be ruled by evil men.",attr:"Plato"},
+];
+
+function showReward() {
+  var q = quotes[Math.floor(Math.random()*quotes.length)];
+  document.getElementById('reward-quote').textContent = '"' + q.text + '"';
+  document.getElementById('reward-attr').textContent = '— ' + q.attr;
+  loadAnimalImage();
+  document.getElementById('reward-modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('reward-modal').classList.remove('open'); }
+
+function populateIncidentSelect(incidents) {
+  var sel = document.getElementById('l-incident-select');
+  sel.innerHTML = '<option value="">— Select an incident —</option>';
+  incidents.forEach(function(i, idx) {
+    var label = i.company + (i.category ? ' (' + i.category + ')' : '') + ' — ' + (i.problem || '').substring(0, 60) + ((i.problem||'').length > 60 ? '...' : '');
+    var opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = label;
+    sel.appendChild(opt);
+  });
+}
+
+function loadIncidents() {
+  return sbFetch('incidents?select=*&order=created_at.desc&limit=200').then(function(incidents) {
+    allIncidents = incidents || [];
+    populateIncidentSelect(allIncidents);
+    return allIncidents;
+  });
+}
+
+function submitIncident() {
+  var company = document.getElementById('f-company').value.trim();
+  var problem = document.getElementById('f-problem').value.trim();
+  if (!company || !problem) { alert('Please fill in at least the company name and problem description.'); return; }
+  var hours = parseFloat(document.getElementById('f-hours').value) || 0;
+  var mins = parseFloat(document.getElementById('f-mins').value) || 0;
+  var incident = {
+    company: company,
+    problem: problem,
+    category: document.getElementById('f-category').value || null,
+    hours: hours + (mins/60),
+    difficulty: parseInt(document.getElementById('f-difficulty').value) || 5,
+    wish: document.getElementById('f-wish').value.trim() || null,
+    solution: document.getElementById('f-solution').value.trim() || null,
+    name: document.getElementById('f-name').value.trim() || null,
+    resolved: document.getElementById('f-resolved').value
+  };
+  var btn = document.getElementById('submit-btn');
+  var errDiv = document.getElementById('submit-error');
+  btn.disabled = true; btn.textContent = 'Saving...'; errDiv.innerHTML = '';
+  sbFetch('incidents', {method:'POST', prefer:'return=minimal', body:JSON.stringify(incident)}).then(function(){
+    ['f-company','f-problem','f-hours','f-mins','f-difficulty','f-wish','f-solution','f-name'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('f-category').value = '';
+    document.getElementById('f-resolved').value = 'no';
+    loadIncidents();
+    showReward();
+    btn.disabled = false; btn.textContent = 'Submit & Claim Your Reward';
+  }).catch(function(e){
+    errDiv.innerHTML = '<div class="error-msg">Could not save. Error: ' + e.message + '</div>';
+    btn.disabled = false; btn.textContent = 'Submit & Claim Your Reward';
+  });
+}
+
+function renderDashboard() {
+  document.getElementById('offender-tbody').innerHTML = '<tr><td colspan="5" style="color:var(--muted);font-style:italic;padding:20px">Loading...</td></tr>';
+  document.getElementById('incident-list').innerHTML = '<div class="empty-state">Loading...</div>';
+  sbFetch('incidents?select=*&order=created_at.desc&limit=200').then(function(incidents){
+    allIncidents = incidents || [];
+    populateIncidentSelect(allIncidents);
+    document.getElementById('stat-incidents').textContent = incidents.length;
+    document.getElementById('stat-hours').textContent = incidents.reduce(function(s,i){ return s+(i.hours||0); },0).toFixed(1);
+    document.getElementById('stat-offenders').textContent = new Set(incidents.map(function(i){ return (i.company||'').toLowerCase(); })).size;
+
+    var byCompany = {};
+    incidents.forEach(function(i){
+      var k = i.company || 'Unknown';
+      if (!byCompany[k]) byCompany[k] = {name:k, category:i.category, count:0, diffSum:0, hours:0};
+      byCompany[k].count++; byCompany[k].diffSum += (i.difficulty||5); byCompany[k].hours += (i.hours||0);
     });
-  }
+    var sorted = Object.values(byCompany).sort(function(a,b){ return (b.diffSum/b.count)-(a.diffSum/a.count); });
+    document.getElementById('offender-tbody').innerHTML = sorted.length ? sorted.map(function(c){
+      var avg = (c.diffSum/c.count).toFixed(1);
+      var cat = c.category || '';
+      var bc = 'badge-util';
+      if (cat.indexOf('Insurance') > -1) bc = 'badge-ins';
+      else if (cat.indexOf('Government') > -1) bc = 'badge-gov';
+      else if (cat.indexOf('Subscription') > -1) bc = 'badge-sub';
+      else if (cat.indexOf('Medical') > -1) bc = 'badge-med';
+      var safeName = c.name.replace(/'/g,"\\'");
+      return '<tr style="cursor:pointer;" onclick="scrollToCompany(\''+safeName+'\')" title="Click to see incidents"><td style="color:var(--cream);font-weight:600">'+c.name+' <span style="font-family:\'Space Mono\',monospace;font-size:0.55rem;color:var(--muted);">↓</span></td><td><span class="badge '+bc+'">'+(cat||'&mdash;')+'</span></td><td>'+c.count+'</td><td><span class="diff-bar" style="width:'+Math.round((avg/10)*80)+'px"></span>'+avg+'/10</td><td>'+c.hours.toFixed(1)+'h</td></tr>';
+    }).join('') : '<tr><td colspan="5" style="color:var(--muted);font-style:italic;padding:20px">No incidents yet. Be the first.</td></tr>';
 
-  async function submitIncident() {
-    const company = document.getElementById('f-company').value.trim();
-    const problem = document.getElementById('f-problem').value.trim();
-    if (!company || !problem) { alert('Please fill in at least the company and what happened.'); return; }
+    var list = document.getElementById('incident-list');
+    incidentLookup = {};
+    list.innerHTML = incidents.length ? incidents.map(function(i){
+      var date = i.created_at ? new Date(i.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+      var resolvedColor = i.resolved==='yes' ? '#81b29a' : i.resolved==='partial' ? 'var(--gold)' : 'var(--muted)';
+      var safeId = String(i.id).replace(/[^a-zA-Z0-9]/g,'_');
+      incidentLookup[safeId] = {company: i.company, category: i.category||'', problem: i.problem||''};
+      return '<div class="incident-card" id="card-'+safeId+'">'
+        +'<div class="inc-company">'+i.company+(i.category?' <span style="font-size:0.75rem;color:var(--muted);font-weight:400">&mdash; '+i.category+'</span>':'')+'</div>'
+        +'<div class="inc-issue">'+(i.problem||'')+'</div>'
+        +(i.wish?'<div class="inc-wish">'+i.wish+'</div>':'')
+        +(i.solution?'<div style="font-size:0.85rem;color:#81b29a;margin-top:6px">&#10003; '+i.solution+'</div>':'')
+        +'<div class="inc-meta">'
+        +(i.hours>0?'<span class="inc-time">'+i.hours.toFixed(1)+'h lost</span>':'')
+        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.65rem;color:var(--red)">annoyance: '+(i.difficulty||'?')+'/10</span>'
+        +'<span class="inc-date">'+date+'</span>'
+        +(i.name?'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:var(--muted)">&mdash; '+i.name+'</span>':'')
+        +'<span style="font-family:\'Space Mono\',monospace;font-size:0.6rem;color:'+resolvedColor+'">'+i.resolved+'</span>'
+        +'</div>'
+        +'<button class="context-btn" onclick="getContext(\''+safeId+'\',this)">&#9670; The bigger picture</button>'
+        +'<div class="context-box" id="ctx-'+safeId+'"><div class="context-label">Wider Context</div><span class="ctx-text"></span></div>'
+        +'</div>';
+    }).join('') : '<div class="empty-state">No incidents yet. Log your first bureaucratic battle.</div>';
+  }).catch(function(e){
+    document.getElementById('offender-tbody').innerHTML = '<tr><td colspan="5" style="color:#e07a5f;padding:20px">Error: '+e.message+'</td></tr>';
+  });
+}
 
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
+// All AI calls now go through the secure Netlify function — no API key in the browser
+function callAI(payload) {
+  return fetch('/.netlify/functions/generate-letter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function(r) {
+    if (!r.ok) throw new Error('Function error: ' + r.status);
+    return r.json();
+  });
+}
 
-    const payload = {
-      company,
-      category: document.getElementById('f-category').value,
-      problem,
-      hours: parseFloat(document.getElementById('f-hours').value) || null,
-      difficulty: selectedDiff || null,
-      wish: document.getElementById('f-wish').value.trim() || null,
-      solution: document.getElementById('f-solution').value.trim() || null,
-      name: document.getElementById('f-name').value.trim() || null,
-      resolved: document.getElementById('f-resolved').value
-    };
+function generateLetter() {
+  var sel = document.getElementById('l-incident-select');
+  var idx = sel.value;
+  if (idx === '') { alert('Please select an incident first.'); return; }
+  var incident = allIncidents[parseInt(idx)];
+  if (!incident) { alert('Could not find that incident. Please try again.'); return; }
 
-    try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/incidents', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify(payload)
-      });
+  var sender = document.getElementById('l-sender').value.trim() || 'A Concerned Consumer';
+  var location = document.getElementById('l-location').value.trim() || 'United States';
 
-      if (!res.ok) throw new Error('Submission failed');
+  var btn = document.getElementById('letter-btn-text');
+  btn.innerHTML = '<span class="spinner"></span> Drafting your letter...';
 
-      // Reset form
-      ['f-company','f-problem','f-hours','f-wish','f-solution','f-name'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('f-category').value = '';
-      document.getElementById('f-resolved').value = 'no';
-      setDiff(0);
+  callAI({ type: 'letter', incident: incident, sender: sender, location: location })
+    .then(function(data) {
+      var out = document.getElementById('letter-output');
+      out.textContent = data.letter || data.text || 'No content returned.';
+      out.classList.add('visible');
+      document.getElementById('letter-actions').style.display = 'flex';
+      out.scrollIntoView({behavior:'smooth', block:'start'});
+      btn.innerHTML = 'Generate Complaint Letter';
+      fetchRecipients(incident);
+    }).catch(function(e) {
+      var out = document.getElementById('letter-output');
+      out.textContent = 'Error: ' + e.message;
+      out.classList.add('visible');
+      btn.innerHTML = 'Generate Complaint Letter';
+    });
+}
 
-      showSuccess();
-    } catch(e) {
-      alert('Something went wrong. Please try again.');
+function fetchRecipients(incident) {
+  var recipBox = document.getElementById('recipients-box');
+  var recipText = document.getElementById('recipients-text');
+  recipBox.style.display = 'none';
+  recipText.textContent = 'Identifying recipients...';
+
+  callAI({ type: 'recipients', incident: incident })
+    .then(function(data) {
+      recipText.textContent = data.letter || data.text || 'No recipients returned.';
+      recipBox.style.display = 'block';
+    }).catch(function(e) {
+      recipText.textContent = 'Error fetching recipients: ' + e.message;
+      recipBox.style.display = 'block';
+    });
+}
+
+function scrollToCompany(name) {
+  var cards = document.querySelectorAll('.incident-card');
+  for (var i = 0; i < cards.length; i++) {
+    var companyEl = cards[i].querySelector('.inc-company');
+    if (companyEl && companyEl.textContent.trim().toLowerCase().indexOf(name.toLowerCase()) === 0) {
+      cards[i].scrollIntoView({behavior:'smooth', block:'start'});
+      cards[i].style.transition = 'border-color 0.3s';
+      cards[i].style.borderColor = 'var(--gold)';
+      setTimeout(function(card){ card.style.borderColor = ''; }, 1500, cards[i]);
+      return;
     }
+  }
+  var list = document.getElementById('incident-list');
+  if (list) list.scrollIntoView({behavior:'smooth', block:'start'});
+}
 
-    btn.disabled = false;
-    btn.textContent = 'Submit Incident Report';
+function copyLetter(){
+  navigator.clipboard.writeText(document.getElementById('letter-output').textContent)
+    .then(function(){ alert('Letter copied to clipboard!'); });
+}
+function clearLetter(){
+  var out = document.getElementById('letter-output');
+  out.textContent = ''; out.classList.remove('visible');
+  document.getElementById('letter-actions').style.display = 'none';
+  document.getElementById('recipients-box').style.display = 'none';
+}
+
+var contextCache = {};
+var incidentLookup = {};
+
+function getContext(id, btn) {
+  var incident = incidentLookup[id];
+  if (!incident) { alert('Could not find incident data. Try refreshing the dashboard.'); return; }
+  var box = document.getElementById('ctx-' + id);
+  var textEl = box.querySelector('.ctx-text');
+
+  if (box.classList.contains('visible')) {
+    box.classList.remove('visible');
+    btn.innerHTML = '&#9670; The bigger picture';
+    return;
   }
 
-  const quotes = [
-    ["The most courageous act is still to think for yourself. Aloud.", "Coco Chanel"],
-    ["Disobedience is the true foundation of liberty.", "Thoreau"],
-    ["I am no longer accepting the things I cannot change. I am changing the things I cannot accept.", "Angela Davis"],
-    ["Every act of rebellion expresses a nostalgia for innocence.", "Camus"],
-    ["The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion.", "Camus"],
-    ["Power concedes nothing without a demand.", "Frederick Douglass"],
-    ["Speak your mind even if your voice shakes.", "Maggie Kuhn"],
-    ["If not us, who? If not now, when?", "John Lewis"]
-  ];
-
-  const animals = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dog_Breeds.jpg/320px-Dog_Breeds.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/320px-Kittyply_edit1.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/320px-Cat03.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cute_dog.jpg/320px-Cute_dog.jpg',
-  ];
-
-  function showSuccess() {
-    const [quote, attr] = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('success-quote').textContent = '"' + quote + '"';
-    document.getElementById('success-attr').textContent = '— ' + attr;
-    document.getElementById('animal-img').src = animals[Math.floor(Math.random() * animals.length)];
-    const box = document.getElementById('success-box');
+  if (contextCache[id]) {
+    textEl.textContent = contextCache[id];
     box.classList.add('visible');
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    btn.innerHTML = '&#9670; Hide';
+    return;
   }
 
-  async function loadDashboard() {
-    try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/incidents?select=*&order=created_at.desc&limit=50', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      });
-      const data = await res.json();
+  btn.textContent = 'Thinking...';
+  btn.disabled = true;
 
-      document.getElementById('stat-total').textContent = data.length;
-      const hours = data.reduce((s, i) => s + (i.hours || 0), 0);
-      document.getElementById('stat-hours').textContent = hours % 1 === 0 ? hours : hours.toFixed(1);
-      document.getElementById('stat-resolved').textContent = data.filter(i => i.resolved === 'yes').length;
-
-      const list = document.getElementById('incident-list');
-      if (!data.length) { list.innerHTML = '<div class="empty">No incidents yet. Be the first to log one.</div>'; return; }
-
-      list.innerHTML = data.map(i => {
-        const date = new Date(i.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const diffStr = i.difficulty ? '★'.repeat(i.difficulty) + '☆'.repeat(5 - i.difficulty) : '';
-        return `<div class="incident-card">
-          <div class="incident-header">
-            <div class="incident-company">${esc(i.company)}</div>
-            <div class="incident-meta">${date}${i.name ? ' · ' + esc(i.name) : ''}${i.hours ? ' · ' + i.hours + 'h' : ''}</div>
-          </div>
-          <div class="incident-problem">${esc(i.problem)}</div>
-          <div class="incident-tags">
-            ${i.category ? '<span class="tag">' + esc(i.category) + '</span>' : ''}
-            ${diffStr ? '<span class="tag">' + diffStr + '</span>' : ''}
-            ${i.resolved === 'yes' ? '<span class="tag resolved">Resolved</span>' : ''}
-            ${i.resolved === 'gave-up' ? '<span class="tag flagged">Gave up</span>' : ''}
-            ${i.solution ? '<span class="tag">Fix: ' + esc(i.solution) + '</span>' : ''}
-            <button class="report-btn" onclick="reportIncident(${i.id})">⚑ Report</button>
-          </div>
-        </div>`;
-      }).join('');
-    } catch(e) {
-      document.getElementById('incident-list').innerHTML = '<div class="empty">Could not load incidents.</div>';
-    }
-  }
-
-  async function loadOffenders() {
-    try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/incidents?select=company,difficulty', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      });
-      const data = await res.json();
-
-      const tally = {};
-      data.forEach(i => {
-        if (!i.company) return;
-        const c = i.company.trim().toLowerCase();
-        if (!tally[c]) tally[c] = { name: i.company, count: 0, diffSum: 0 };
-        tally[c].count++;
-        tally[c].diffSum += (i.difficulty || 3);
-      });
-
-      const sorted = Object.values(tally)
-        .map(t => ({ ...t, avg: t.diffSum / t.count }))
-        .sort((a, b) => b.avg - a.avg || b.count - a.count)
-        .slice(0, 10);
-
-      const list = document.getElementById('offender-list');
-      if (!sorted.length) { list.innerHTML = '<div class="empty">No data yet.</div>'; return; }
-
-      const maxAvg = sorted[0].avg;
-      list.innerHTML = sorted.map((o, idx) => `
-        <div class="offender-row">
-          <div class="offender-rank">${idx + 1}</div>
-          <div class="offender-name">${esc(o.name)}</div>
-          <div class="offender-bar-wrap"><div class="offender-bar" style="width:${(o.avg/maxAvg*100).toFixed(0)}%"></div></div>
-          <div class="offender-count">${o.count} report${o.count !== 1 ? 's' : ''} · avg ${o.avg.toFixed(1)}</div>
-        </div>
-      `).join('');
-    } catch(e) {
-      document.getElementById('offender-list').innerHTML = '<div class="empty">Could not load data.</div>';
-    }
-  }
-
-  async function reportIncident(id) {
-    if (!confirm('Flag this post for review?')) return;
-    // In a full implementation this would write to a reports table.
-    // For now we alert the admin via a simple notification pattern.
-    alert('Thanks for flagging. This post has been marked for admin review.');
-  }
-
-  async function generateLetter() {
-    const company = document.getElementById('l-company').value.trim();
-    const problem = document.getElementById('l-problem').value.trim();
-    const name = document.getElementById('l-name').value.trim();
-    const city = document.getElementById('l-city').value.trim();
-
-    if (!company || !problem) { alert('Please fill in the company and problem.'); return; }
-
-    const btn = document.getElementById('letter-btn');
-    btn.disabled = true;
-    btn.textContent = 'Drafting letter…';
-
-    const output = document.getElementById('letter-output');
-    output.textContent = 'Drafting your letter…';
-    output.classList.add('visible');
-    document.getElementById('copy-btn').style.display = 'none';
-
-    try {
-      // Calls the Netlify serverless function — no API key in the browser
-      const res = await fetch('/.netlify/functions/generate-letter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company, problem, name, city })
-      });
-
-      if (!res.ok) throw new Error('Letter generation failed');
-      const data = await res.json();
-      output.textContent = data.letter;
-      document.getElementById('copy-btn').style.display = 'inline-block';
-    } catch(e) {
-      output.textContent = 'Something went wrong generating the letter. Please try again.';
-    }
-
-    btn.disabled = false;
-    btn.textContent = 'Generate Complaint Letter';
-  }
-
-  function copyLetter() {
-    const text = document.getElementById('letter-output').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy letter to clipboard', 2000);
+  callAI({ type: 'context', incident: incident })
+    .then(function(data) {
+      var text = data.letter || data.text || 'No context returned.';
+      contextCache[id] = text;
+      textEl.textContent = text;
+      box.classList.add('visible');
+      btn.innerHTML = '&#9670; Hide';
+      btn.disabled = false;
+    }).catch(function(e) {
+      textEl.textContent = 'Error: ' + e.message;
+      box.classList.add('visible');
+      btn.innerHTML = '&#9670; The bigger picture';
+      btn.disabled = false;
     });
-  }
+}
 
-  function esc(str) {
-    if (!str) return '';
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+loadIncidents();
 </script>
 </body>
 </html>
